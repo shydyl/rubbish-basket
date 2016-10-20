@@ -7,12 +7,12 @@
 #include <util/delay.h>
 
 volatile unsigned int time=0;
-static volatile unsigned int i=0;
+volatile unsigned int i=0;
 int main( void )
 {
 	
 	extern volatile unsigned int time;
-	int j=0;
+	int beep_flag=0;
 	DDRB=0x23;
 	DDRC=0xFF;
 	PORTB=0x00;
@@ -29,7 +29,7 @@ int main( void )
 		}else{
 			if (time<=200){
 				PORTC|=0x01;
-				if (j==1)/*sound*/
+				if (beep_flag==1)/*sound*/
 				{
 					PORTB|=0x01;
 				}
@@ -46,13 +46,13 @@ int main( void )
 		}
 		if (i>=2)/*sounding time*/
 		{
-			j=0;
+			beep_flag=0;
 			PORTB&=~0x01;
 		}
 		if (i>=10)/*time reach 1 hour*/
 		{
 			i=0;
-			j=1;
+			beep_flag=1;
 		}
 
 	}
