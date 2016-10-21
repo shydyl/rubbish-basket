@@ -40,6 +40,10 @@ int main( void )
 	
 	DDRB=0x23;
 	DDRC=0xFF;
+	/*DDRB3 connect to the photoresistance*/
+	/*DDRC1,2,3 connet to three LEDs*/
+	/*INT0 connect to the echo of the Ultrasonic distance measurement*/
+	/*DDRB2 connect to the trig of the Ultrasonic distance measurement*/
 	PORTB=0x00;
 	PORTC=0x00;
 	TCCR1B=0x03;
@@ -48,19 +52,20 @@ int main( void )
 	EIMSK=1;
 	sei();
 	while (1){
+		/*no light*/
 		if (((PINB&0x04)==0x04))
 		{
 			PORTC=0xF8;
+		/*light*/
 		}else{
 			if (time<=200){
 				PORTC|=0x01;
-				if (beep_flag==1)/*sound*/
-				{
+				/*sound*/
+				if (beep_flag==1){
 					PORTB|=0x01;
 				}
 				PORTC&=~0x06;
-			}else if(time>=200&&time<=350)
-			{
+			}else if(time>=200&&time<=350){
 				PORTC|=0x02;
 				PORTC&=~0x05;
 			}else{
@@ -69,13 +74,13 @@ int main( void )
 			}
 
 		}
-		if (i>=2)/*sounding time*/
-		{
+		/*sounding time*/
+		if (i>=4){
 			beep_flag=0;
 			PORTB&=~0x01;
 		}
-		if (i>=10)/*time reach 1 hour*/
-		{
+		/*time reach 1 hour*/
+		if (i>=7200){
 			i=0;
 			beep_flag=1;
 		}
