@@ -48,7 +48,7 @@ int main( void )
 	PORTC=0x00;
 	TCCR1B=0x03;
 	TIMSK1=1;
-	MCUCR=0x02;
+	EICRA=0x02;
 	EIMSK=1;
 	sei();
 	while (1){
