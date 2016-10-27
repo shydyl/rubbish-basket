@@ -38,46 +38,46 @@ int main( void )
 	extern volatile unsigned int time;
 	int beep_flag=0;
 	
-	DDRB=0x23;
+	DDRB=0x2F;
 	DDRC=0xFF;
 	/*DDRB3 connect to the photoresistance*/
 	/*DDRC1,2,3 connet to three LEDs*/
-	/*INT0 connect to the echo of the Ultrasonic distance measurement*/
+	/*INT0 connect to the echo of the Ultrasonic d=stance measurement*/
 	/*DDRB2 connect to the trig of the Ultrasonic distance measurement*/
 	PORTB=0x00;
 	PORTC=0x00;
 	TCCR1B=0x03;
 	TIMSK1=1;
-	EICRA=0x02;
+	MCUCR=0x02;
 	EIMSK=1;
 	sei();
 	while (1){
 		/*no light*/
-		if (((PINB&0x04)==0x04))
+		if (((PINB&0x08)==0x08))
 		{
-			PORTC=0xF8;
+			PORTC=0xF1;
 		/*light*/
 		}else{
 			if (time<=200){
-				PORTC|=0x01;
+				PORTC|=0x02;
 				/*sound*/
 				if (beep_flag==1){
-					PORTB|=0x01;
+					PORTB|=0x02;
 				}
-				PORTC&=~0x06;
+				PORTC&=~0x0C;
 			}else if(time>=200&&time<=350){
-				PORTC|=0x02;
-				PORTC&=~0x05;
-			}else{
 				PORTC|=0x04;
-				PORTC&=~0x03;
+				PORTC&=~0xA;
+			}else{
+				PORTC|=0x08;
+				PORTC&=~0x06;
 			}
 
 		}
 		/*sounding time*/
 		if (i>=4){
 			beep_flag=0;
-			PORTB&=~0x01;
+			PORTB&=~0x02;
 		}
 		/*time reach 1 hour*/
 		if (i>=7200){
@@ -97,8 +97,8 @@ ISR(INT0_vect)
 ISR(TIMER1_OVF_vect)
 {
 	extern volatile unsigned int i;
-	PORTB|=0x02;
+	PORTB|=0x04;
 	_delay_us(20);
-	PORTB &=~(0x02);
+	PORTB &=~(0x04);
 	i+=1;
 }
