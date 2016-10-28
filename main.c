@@ -38,7 +38,7 @@ int main( void )
 	extern volatile unsigned int time;
 	int beep_flag=0;
 	
-	DDRB=0x2F;
+	DDRB=0x27;
 	DDRC=0xFF;
 	/*DDRB3 connect to the photoresistance*/
 	/*DDRC1,2,3 connet to three LEDs*/
@@ -58,6 +58,7 @@ int main( void )
 			PORTC=0xF1;
 		/*light*/
 		}else{
+			PORTC&=~0xF1;
 			if (time<=200){
 				PORTC|=0x02;
 				/*sound*/
